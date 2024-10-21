@@ -1,0 +1,41 @@
+[
+  {
+    "id": 1,
+    "title": "Camisetas34343",
+    "descripcion": "lorem lorem",
+    "code": "cami",
+    "price": 30000,
+    "stock": 25,
+    "category": "Ropa deportiva",
+    "thumbnails": [
+      "sdfsadfads"
+    ],
+    "status": true
+  },
+  {
+    "id": 2,
+    "title": "Camisetas2323443",
+    "descripcion": "lorem lorem",
+    "code": "cami",
+    "price": 30000,
+    "stock": 25,
+    "category": "Ropa deportiva",
+    "thumbnails": [
+      "sdfsadfads"
+    ],
+    "status": true
+  },
+  {
+    "id": 3,
+    "title": "Camise34653463443",
+    "descripcion": "lorem lorem",
+    "code": "cami",
+    "price": 30000,
+    "stock": 25,
+    "category": "Ropa deportiva",
+    "thumbnails": [
+      "sdfsadfads"
+    ],
+    "status": true
+  }
+]
