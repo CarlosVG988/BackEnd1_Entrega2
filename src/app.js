@@ -1,9 +1,11 @@
 import express from "express";
-import __dirname from "./utils.js";
+import mongoose from "mongoose"; // Para conectar con MongoDB
 import handlebars from "express-handlebars";
 import viewsRouter from "./views/views.router.js";
+import productsRouter from "./routes/products.router.js"; // Nuevo router de productos
+import cartsRouter from "./routes/carts.router.js"; // Nuevo router de carritos
 import { Server } from "socket.io";
-import fs from "fs/promises";
+import __dirname from "./utils.js";
 
 const app = express();
 
@@ -16,47 +18,20 @@ app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 app.use(express.static(__dirname + "/public"));
 
+// Conexión a MongoDB Atlas
+mongoose.connect(
+    "mongodb+srv://vcarlos988:lb0URK6QPSfeBSqt@cluster0.esfd5.mongodb.net/db?retryWrites=true&w=majority&appName=Cluster0",
+    { useNewUrlParser: true, useUnifiedTopology: true }
+)
+.then(() => console.log("Conectado a MongoDB Atlas"))
+.catch((error) => console.log("Error al conectar a MongoDB:", error));
+
+
+// Rutas
 app.use("/", viewsRouter);
+app.use("/api/products", productsRouter); // Endpoints de productos
+app.use("/api/carts", cartsRouter); // Endpoints de carritos
 
 const httpServer = app.listen(8080, () => console.log("Escuchando puerto 8080"));
-const io = new Server(httpServer); // Socket server
+const io = new Server(httpServer);
 
-// Funciones para manejar productos
-const getProducts = async () => {
-    try {
-        const data = await fs.readFile(__dirname + "/data/productos.json");
-        return JSON.parse(data);
-    } catch (error) {
-        console.log("Error al leer los productos");
-        return [];
-    }
-};
-
-const saveProducts = async (products) => {
-    try {
-        await fs.writeFile(__dirname + "/data/productos.json", JSON.stringify(products, null, 2));
-    } catch (error) {
-        console.log("Error al guardar los productos");
-    }
-};
-
-io.on("connection", async (socket) => {
-    console.log("Nuevo cliente conectado");
-
-    let products = await getProducts();
-    socket.emit("productList", products);
-
-    // Recibir nuevo producto y guardar
-    socket.on("newProduct", async (product) => {
-        products.push(product);
-        await saveProducts(products);
-        io.emit("productList", products);
-    });
-
-    // Eliminar producto por nombre
-    socket.on("deleteProduct", async (name) => {
-        products = products.filter(product => product.title !== name);
-        await saveProducts(products);
-        io.emit("productList", products);
-    });
-});

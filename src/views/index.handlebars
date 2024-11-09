@@ -1,9 +1,21 @@
-  <h1>Lista de productos</h1>
-    <div id="productContainer">
-        <!-- Aquí se mostrarán las tarjetas de productos -->
-    </div>
-    <button id="refreshBtn">Actualizar Productos</button>
-
+<h1>Lista de productos</h1>
+<div id="productContainer">
+    {{#each products}}
+        <div>
+            <h3>{{this.title}}</h3>
+            <p>{{this.descripcion}}</p>
+            <p>Precio: {{this.price}}</p>
+            <p>Categoría: {{this.category}}</p>
+            <button onclick="addToCart('{{this._id}}')">Agregar al carrito</button>
+        </div>
+        <hr>
+    {{/each}}
+</div>
 
 <script src="/socket.io/socket.io.js"></script>
-<script src="/js/index.js"></script>
+<script>
+    // Función para agregar producto al carrito
+    function addToCart(productId) {
+        // Realiza una solicitud para agregar el producto al carrito
+    }
+</script>
